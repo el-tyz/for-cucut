@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hii Cucut 💖</title>
+  <style>
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #ffe4e1, #ffccda, #ffdce7, #ffe4e1);
+      background-size: 400% 400%;
+      animation: gradientBG 10s ease infinite;
+      text-align: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    h1, .question {
+      color: #b30059;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      animation: fadeSlide 1.5s ease-out forwards;
+    }
+
+    button {
+      font-size: 1.3rem;
+      padding: 14px 28px;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      animation: pulse 2s infinite ease-in-out;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff85c1;
+    }
+
+    .photo-section {
+      margin-top: 50px;
+      animation: fadeSlide 2s ease forwards;
+    }
+
+    .photo-section img {
+      width: 240px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 20px;
+      animation: fadeSlide 1.5s ease-out forwards;
+    }
+
+    .message {
+      font-size: 1.2rem;
+      color: #5a2d4d;
+      max-width: 80%;
+      margin-top: 10px;
+      animation: fadeSlide 2.5s ease-out forwards;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+
+  <audio id="bg-music" autoplay loop>
+    <source src="yung kai - wildflower (official audio) (320).mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
+
+  <div id="initial-content">
+    <h1>Spesial dari El untuk Cucut! 💐</h1>
+    <div id="questions" class="question"></div>
+    <button id="continue-btn" onclick="showSurprise()" style="display:none">To my girl: 💌</button>
+  </div>
+
+  <div class="photo-section" style="display: none;">
+    <img src="WhatsApp Image 2025-08-01 at 13.07.15.jpeg" alt="Foto Cucut">
+    <div class="message">
+      <p>maaf yaa telat dan harus di notice dulu baru mau gerakk...<br>
+      tunggu aku hari kamis depan. moga kamu suka yaa hadiah kecil dari el<br>
+      <strong>To my girl 😍😁😎🥰</strong></p>
+    </div>
+  </div>
+
+  <iframe style="display:none;" id="spotify" src="https://open.spotify.com/embed/track/7LQRkbDWzXIULohFAxAY78?utm_source=generator&theme=0" width="0" height="0" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+  <script>
+    const questions = [
+      "Kamu tau kan hari hari apa?",
+	  "Tau kan. soalnya kamu yang kasi tau duluan😂",
+      "Tebak, siapa yang lagi kangen si Cucut?",
+      "Kalau klik tombol ini... kira-kira bakal senyum nggak ya? 💘"
+    ];
+
+    let index = 0;
+    const questionDiv = document.getElementById('questions');
+    const continueBtn = document.getElementById('continue-btn');
+
+    function showNextQuestion() {
+      if (index < questions.length) {
+        questionDiv.innerText = questions[index];
+        index++;
+        setTimeout(showNextQuestion, 2500);
+      } else {
+        continueBtn.style.display = 'inline-block';
+      }
+    }
+
+    window.onload = showNextQuestion;
+
+    function showSurprise() {
+      document.getElementById('initial-content').style.display = 'none';
+      document.querySelector('.photo-section').style.display = 'block';
+      document.querySelector('canvas').style.display = 'block';
+      document.getElementById('spotify').style.display = 'block';
+
+      const audio = document.getElementById('bg-music');
+      audio.play();
+    }
+
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    function createParticle(x, y) {
+      const colors = ['#ff99cc', '#ff6699', '#ff66cc', '#ffb6c1'];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      return {
+        x,
+        y,
+        radius: random(1, 3),
+        color,
+        velocityX: random(-3, 3),
+        velocityY: random(-3, 3),
+        life: 100
+      };
+    }
+
+    function explode(x, y) {
+      for (let i = 0; i < 30; i++) {
+        particles.push(createParticle(x, y));
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.fillStyle = 'rgba(255, 228, 225, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p, i) => {
+        p.x += p.velocityX;
+        p.y += p.velocityY;
+        p.life--;
+
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+    }
+
+    animate();
+    setInterval(() => {
+      explode(random(100, canvas.width - 100), random(100, canvas.height - 100));
+    }, 800);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
